@@ -1,0 +1,42 @@
+*&---------------------------------------------------------------------*
+*& Include ZFIBL002GAP039_LIBRO_RETEN_TOP              - Report ZFIBL002GAP039_EMISION_AUGE
+*&---------------------------------------------------------------------*
+
+***********************
+* TABLES DEFINITION
+***********************
+
+TABLES: bsak, bkpf, bseg.
+
+***********************
+* CLASS DEFINITION
+***********************
+
+CLASS lcl_eti DEFINITION DEFERRED.
+CLASS lcl_event_handler DEFINITION DEFERRED.
+
+***********************
+* TYPES DEFINITION
+***********************
+
+*----------------------------------------------------------------------*
+*   P A R Á M E T R O S   D E  S E L E C C I Ó N                       *
+*----------------------------------------------------------------------*
+
+SELECTION-SCREEN BEGIN OF BLOCK block_b1 WITH FRAME TITLE TEXT-b01.
+
+  PARAMETERS:     p_bukrs TYPE bukrs OBLIGATORY DEFAULT TEXT-001. "U001
+  SELECT-OPTIONS: s_gsber FOR bseg-gsber OBLIGATORY,
+                  s_monat FOR bsak-monat OBLIGATORY.
+  PARAMETERS:     p_gjahr TYPE gjahr OBLIGATORY.
+  SELECT-OPTIONS: s_lifnr FOR bsak-lifnr.
+
+SELECTION-SCREEN END OF BLOCK block_b1.
+
+SELECTION-SCREEN BEGIN OF BLOCK block_b2 WITH FRAME TITLE TEXT-b02.
+
+  PARAMETERS: p_todos RADIOBUTTON GROUP g1 DEFAULT 'X', "Todos los documentos
+              p_comp  RADIOBUTTON GROUP g1,             "Doc. compensados
+              p_scomp RADIOBUTTON GROUP g1.             "Doc. Sin compensar
+
+SELECTION-SCREEN END OF BLOCK block_b2.
