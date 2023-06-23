@@ -1,0 +1,76 @@
+*&---------------------------------------------------------------------*
+*& Report ZFIBL002GAP039_LIBRO_RETEN
+*&---------------------------------------------------------------------*
+* Proyecto         : 
+* Requerimiento N°.: 
+* Programa         : 
+* Programa transac : 
+* Creado por       : 
+* Fecha creación   : 
+* Descripción      : 
+* Transporte       : 
+*&---------------------------------------------------------------------*
+* MODIFICATION LOG
+*&---------------------------------------------------------------------*
+* Modificado por  :
+* Requerimiento N°:
+* ID Cambio       :
+* Fecha           :
+* Descripción     :
+* Transporte      :
+*&---------------------------------------------------------------------*
+
+REPORT zfibl002gap039_libro_reten.
+
+***********************
+* INCLUDE DEFINITION
+***********************
+
+INCLUDE zfibl002gap039_libro_reten_top. " Declaraciones generale
+INCLUDE zfibl002gap039_libro_reten_f02. " Cl. procesamiento
+INCLUDE zfibl002gap039_libro_reten_f01. " Subrutinas
+
+*----------------------------------------------------------------------*
+* I N I T I A L I Z A T I O N                                          *
+*----------------------------------------------------------------------*
+*
+*----------------------------------------------------------------------*
+INITIALIZATION.
+
+*----------------------------------------------------------------------*
+* A T  S E L E C T I O N  S C R E E N                                  *
+*----------------------------------------------------------------------*
+* Procesar ejecución
+*----------------------------------------------------------------------*
+AT SELECTION-SCREEN.
+
+  lcl_eti=>value_request_monat( ir_monat = s_monat[] ).
+
+  lcl_eti=>authority_check( ).
+
+*----------------------------------------------------------------------*
+* S T A R T  O F  S E L E C T I O N                                    *
+*----------------------------------------------------------------------*
+* Procesa selección de datos
+*----------------------------------------------------------------------*
+START-OF-SELECTION.
+
+  lcl_eti=>get_data( EXPORTING iv_bukrs = p_bukrs
+                               ir_gsber = s_gsber[]
+                               ir_monat = s_monat[]
+                               iv_gjahr = p_gjahr
+                               ir_lifnr = s_lifnr[] ).
+
+*----------------------------------------------------------------------*
+* E N D  O F  S E L E C T I O N                                        *
+*----------------------------------------------------------------------*
+* Display ALV
+*----------------------------------------------------------------------*
+END-OF-SELECTION.
+
+  IF lcl_eti=>gt_alv IS NOT INITIAL.
+    lcl_eti=>display_alv( ).
+  ELSE.
+    " No existen datos en los parámetros ingresados
+    MESSAGE s021(zfibl002gap039_bte) DISPLAY LIKE 'W'.
+  ENDIF.
