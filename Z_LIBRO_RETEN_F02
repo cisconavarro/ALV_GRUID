@@ -1,0 +1,1603 @@
+*&---------------------------------------------------------------------*
+*& Include          ZFIBL002GAP039_LIBRO_RETEN_F02
+*&---------------------------------------------------------------------*
+
+*----------------------------------------------------------------------*
+*       CLASS lcl_event_handler DEFINITION.
+*----------------------------------------------------------------------*
+*       (DTT_FNAVARRO)
+*----------------------------------------------------------------------*
+CLASS lcl_event_handler DEFINITION.
+
+  PUBLIC SECTION.
+
+    METHODS:
+      added_function FOR EVENT added_function OF cl_salv_events_table
+        IMPORTING e_salv_function.
+
+    METHODS:
+      on_link_click FOR EVENT link_click OF cl_salv_events_table
+        IMPORTING row
+                  column.
+
+ENDCLASS. " lcl_event_handler
+
+*----------------------------------------------------------------------*
+*       CLASS lcl_eti DEFINITION
+*----------------------------------------------------------------------*
+*       (DTT_FNAVARRO)
+*----------------------------------------------------------------------*
+CLASS lcl_eti DEFINITION.
+
+  PUBLIC SECTION.
+
+***********************
+* TYPES DEFINITION
+***********************
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_out_alv,
+
+             cant       TYPE int4,
+             bukrs      TYPE bsak_view-bukrs,
+             gsber      TYPE bsak_view-gsber,
+             belnr      TYPE bsak_view-belnr,
+             gjahr      TYPE bsak_view-gjahr,
+             lifnr      TYPE bsak_view-lifnr,
+             idnumber   TYPE but0id-idnumber,
+             name_first TYPE ad_namtext,
+             street     TYPE adrc-street,
+             mc_city1   TYPE adrc-mc_city1,
+             city_code  TYPE adrcityt-city_code,
+             blart      TYPE bsak_view-blart,
+             xblnr      TYPE bsak_view-xblnr,
+             bldat      TYPE bsak_view-bldat,
+             budat      TYPE bsak_view-budat,
+             qsshb      TYPE bsak_view-qsshb,
+             qbshb      TYPE bsak_view-qbshb,
+             dmbtr      TYPE bsak_view-dmbtr,
+             sgtxt      TYPE bsak_view-sgtxt,
+             augbl      TYPE bsak_view-augbl,
+             audgt      TYPE bsak_view-augdt,
+             witht      TYPE t059z-witht,
+             wt_withcd  TYPE t059z-wt_withcd,
+             qsatz      TYPE t059z-qsatz,
+             waers      TYPE bsak_view-waers,
+
+           END OF ty_out_alv.
+
+    TYPES ty_t_out_alv TYPE TABLE OF ty_out_alv.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_bsak,
+
+             bukrs TYPE bsak_view-bukrs,
+             gsber TYPE bsak_view-gsber,
+             belnr TYPE bsak_view-belnr,
+             gjahr TYPE bsak_view-gjahr,
+             lifnr TYPE bsak_view-lifnr,
+             blart TYPE bsak_view-blart,
+             xblnr TYPE bsak_view-xblnr,
+             bldat TYPE bsak_view-bldat,
+             budat TYPE bsak_view-budat,
+             qsshb TYPE bsak_view-qsshb,
+             qbshb TYPE bsak_view-qbshb,
+             dmbtr TYPE bsak_view-dmbtr,
+             sgtxt TYPE bsak_view-sgtxt,
+             augbl TYPE bsak_view-augbl,
+             augdt TYPE bsak_view-augdt,
+             waers TYPE bsak_view-waers,
+
+           END OF ty_bsak.
+
+    TYPES ty_t_bsak TYPE TABLE OF ty_bsak.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_bsik,
+
+             bukrs TYPE bsik_view-bukrs,
+             gsber TYPE bsik_view-gsber,
+             belnr TYPE bsik_view-belnr,
+             gjahr TYPE bsik_view-gjahr,
+             lifnr TYPE bsik_view-lifnr,
+             blart TYPE bsik_view-blart,
+             xblnr TYPE bsik_view-xblnr,
+             bldat TYPE bsik_view-bldat,
+             budat TYPE bsik_view-budat,
+             qsshb TYPE bsik_view-qsshb,
+             qbshb TYPE bsik_view-qbshb,
+             dmbtr TYPE bsik_view-dmbtr,
+             sgtxt TYPE bsik_view-sgtxt,
+             augbl TYPE bsik_view-augbl,
+             augdt TYPE bsik_view-augdt,
+             waers TYPE bsik_view-waers,
+
+           END OF ty_bsik.
+
+    TYPES: ty_t_bsik TYPE TABLE OF ty_bsik.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_bkpf,
+
+             bukrs     TYPE bkpf-bukrs,
+             gjahr     TYPE bkpf-gjahr,
+             belnr     TYPE bkpf-belnr,
+             xreversed TYPE bkpf-xreversed,
+
+           END OF ty_bkpf.
+
+    TYPES ty_t_bkpf TYPE TABLE OF ty_bkpf.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_but0id,
+
+             partner  TYPE but0id-partner,
+             type     TYPE but0id-type,
+             idnumber TYPE but0id-idnumber,
+
+           END OF ty_but0id.
+
+    TYPES ty_t_but0id TYPE TABLE OF ty_but0id.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_but000,
+
+             partner    TYPE but000-partner,
+             name_first TYPE but000-name_first,
+             name_last  TYPE but000-name_last,
+             name_lst2  TYPE but000-name_lst2,
+
+           END OF ty_but000.
+
+    TYPES ty_t_but000 TYPE TABLE OF ty_but000.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_but020,
+
+             partner    TYPE but020-partner,
+             addrnumber TYPE but020-addrnumber,
+
+           END OF ty_but020.
+
+    TYPES ty_t_but020 TYPE TABLE OF ty_but020.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_adrc,
+
+             addrnumber TYPE adrc-addrnumber,
+             street     TYPE adrc-street,
+             mc_city1   TYPE adrc-mc_city1,
+
+           END OF ty_adrc.
+
+    TYPES ty_t_adrc TYPE TABLE OF ty_adrc.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_adrcityt,
+
+             city_code TYPE adrcityt-city_code,
+             city_name TYPE adrcityt-city_name,
+             mc_city   TYPE adrcityt-mc_city,
+
+           END OF ty_adrcityt.
+
+    TYPES ty_t_adrcityt TYPE TABLE OF ty_adrcityt.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_with_item,
+
+             bukrs     TYPE with_item-bukrs,
+             belnr     TYPE with_item-belnr,
+             gjahr     TYPE with_item-gjahr,
+             witht     TYPE with_item-witht,
+             wt_withcd TYPE with_item-wt_withcd,
+
+           END OF ty_with_item.
+
+    TYPES: ty_t_with_item TYPE TABLE OF ty_with_item.
+
+*----------------------------------------------------------------------*
+
+    TYPES: BEGIN OF ty_t059z,
+
+             witht     TYPE t059z-witht,
+             wt_withcd TYPE t059z-wt_withcd,
+             qsatz     TYPE t059z-qsatz,
+
+           END OF ty_t059z.
+
+    TYPES: ty_t_t059z TYPE TABLE OF ty_t059z.
+
+*----------------------------------------------------------------------*
+
+    TYPES: ty_t_lifnr TYPE RANGE OF bsak-lifnr.
+    TYPES: ty_t_gsber TYPE RANGE OF bseg-gsber.
+    TYPES: ty_t_monat TYPE RANGE OF bsak-monat.
+
+***********************
+* CONSTANTS DEFINITION
+***********************
+
+    CONSTANTS:gc_bt  TYPE bsak-blart  VALUE 'BT',
+              gc_rut TYPE but0id-type VALUE 'ZRUT',
+              gc_run TYPE but0id-type VALUE 'ZRUN',
+              gc_cl  TYPE land1       VALUE 'CL'.
+
+************************
+* CLASS-DATA DEFINITION
+************************
+
+    CLASS-DATA:
+      gt_alv       TYPE ty_t_out_alv,
+      gt_bsak      TYPE ty_t_bsak,
+      gt_bsik      TYPE ty_t_bsik,
+      gt_all_doc   TYPE ty_t_bsak,
+      gt_bkpf      TYPE ty_t_bkpf,
+      gt_but0id    TYPE ty_t_but0id,
+      gt_but000    TYPE ty_t_but000,
+      gt_but020    TYPE ty_t_but020,
+      gt_adrc      TYPE ty_t_adrc,
+      gt_adrcityt  TYPE ty_t_adrcityt,
+      gt_with_item TYPE ty_t_with_item,
+      gt_t059z     TYPE ty_t_t059z.
+
+***************************
+* CLASS-METHODS DEFINITION
+***************************
+
+    CLASS-METHODS:
+
+*     01. Authority check
+      authority_check,
+
+*     02. Obtiene data
+      get_data IMPORTING iv_bukrs     TYPE bukrs
+                         ir_gsber     TYPE ty_t_gsber
+                         ir_monat     TYPE ty_t_monat
+                         iv_gjahr     TYPE gjahr
+                         ir_lifnr     TYPE ty_t_lifnr
+               CHANGING  ct_bsak      TYPE ty_t_bsak        OPTIONAL
+                         ct_bsik      TYPE ty_t_bsik        OPTIONAL
+                         ct_all_doc   TYPE ty_t_bsak        OPTIONAL
+                         ct_bkpf      TYPE ty_t_bkpf        OPTIONAL
+                         ct_but0id    TYPE ty_t_but0id      OPTIONAL
+                         ct_but000    TYPE ty_t_but000      OPTIONAL
+                         ct_but020    TYPE ty_t_but020      OPTIONAL
+                         ct_adrc      TYPE ty_t_adrc        OPTIONAL
+                         ct_adrcityt  TYPE ty_t_adrcityt    OPTIONAL
+                         ct_with_item TYPE ty_t_with_item   OPTIONAL
+                         ct_t059z     TYPE ty_t_t059z       OPTIONAL,
+
+*     03. Obtiene documentos compensados
+      get_compensado IMPORTING iv_bukrs     TYPE bukrs
+                               ir_gsber     TYPE ty_t_gsber
+                               ir_monat     TYPE ty_t_monat
+                               iv_gjahr     TYPE gjahr
+                               ir_lifnr     TYPE ty_t_lifnr
+                     CHANGING  ct_bsak      TYPE ty_t_bsak
+                               ct_bkpf      TYPE ty_t_bkpf
+                               ct_but0id    TYPE ty_t_but0id
+                               ct_but000    TYPE ty_t_but000
+                               ct_but020    TYPE ty_t_but020
+                               ct_adrc      TYPE ty_t_adrc
+                               ct_adrcityt  TYPE ty_t_adrcityt
+                               ct_with_item TYPE ty_t_with_item
+                               ct_t059z     TYPE ty_t_t059z,
+
+*     04. Obtiene documentos no compensados
+      get_no_compensado IMPORTING iv_bukrs     TYPE bukrs
+                                  ir_gsber     TYPE ty_t_gsber
+                                  ir_monat     TYPE ty_t_monat
+                                  iv_gjahr     TYPE gjahr
+                                  ir_lifnr     TYPE ty_t_lifnr
+                        CHANGING  ct_bsik      TYPE ty_t_bsik
+                                  ct_bkpf      TYPE ty_t_bkpf
+                                  ct_but0id    TYPE ty_t_but0id
+                                  ct_but000    TYPE ty_t_but000
+                                  ct_but020    TYPE ty_t_but020
+                                  ct_adrc      TYPE ty_t_adrc
+                                  ct_adrcityt  TYPE ty_t_adrcityt
+                                  ct_with_item TYPE ty_t_with_item
+                                  ct_t059z     TYPE ty_t_t059z,
+
+*     05. Obtiene todos los documentos (Compensados / no compensados)
+      get_todos_documentos IMPORTING iv_bukrs     TYPE bukrs
+                                     ir_gsber     TYPE ty_t_gsber
+                                     ir_monat     TYPE ty_t_monat
+                                     iv_gjahr     TYPE gjahr
+                                     ir_lifnr     TYPE ty_t_lifnr
+                           CHANGING  ct_all_doc   TYPE ty_t_bsak
+                                     ct_bkpf      TYPE ty_t_bkpf
+                                     ct_but0id    TYPE ty_t_but0id
+                                     ct_but000    TYPE ty_t_but000
+                                     ct_but020    TYPE ty_t_but020
+                                     ct_adrc      TYPE ty_t_adrc
+                                     ct_adrcityt  TYPE ty_t_adrcityt
+                                     ct_with_item TYPE ty_t_with_item
+                                     ct_t059z     TYPE ty_t_t059z,
+
+*     06. Display alv
+      display_alv,
+
+*     07. Drill down belnr
+      drill_down_belnr IMPORTING is_row TYPE ty_out_alv,
+
+*     08. Drill down augbl
+      drill_down_augbl IMPORTING is_row TYPE ty_out_alv,
+
+*     09. value_request_monat
+      value_request_monat IMPORTING ir_monat TYPE ty_t_monat.
+
+  PRIVATE SECTION.
+
+    CLASS-METHODS:
+
+*     01. Arma documentos compensados - ALV
+      arma_compensado IMPORTING it_bsak      TYPE ty_t_bsak
+                                it_bkpf      TYPE ty_t_bkpf
+                                it_but0id    TYPE ty_t_but0id
+                                it_but000    TYPE ty_t_but000
+                                it_but020    TYPE ty_t_but020
+                                it_adrc      TYPE ty_t_adrc
+                                it_adrcityt  TYPE ty_t_adrcityt
+                                it_with_item TYPE ty_t_with_item
+                                it_t059z     TYPE ty_t_t059z
+                      CHANGING  ct_alv       TYPE ty_t_out_alv,
+
+*     02. Arma documentos NO compensados - ALV
+      arma_no_compensado IMPORTING it_bsik      TYPE ty_t_bsik
+                                   it_bkpf      TYPE ty_t_bkpf
+                                   it_but0id    TYPE ty_t_but0id
+                                   it_but000    TYPE ty_t_but000
+                                   it_but020    TYPE ty_t_but020
+                                   it_adrc      TYPE ty_t_adrc
+                                   it_adrcityt  TYPE ty_t_adrcityt
+                                   it_with_item TYPE ty_t_with_item
+                                   it_t059z     TYPE ty_t_t059z
+                         CHANGING  ct_alv       TYPE ty_t_out_alv,
+
+*     03. Arma todos los documentos - ALV
+      arma_todos_documentos IMPORTING it_all_doc   TYPE ty_t_bsak
+                                      it_bkpf      TYPE ty_t_bkpf
+                                      it_but0id    TYPE ty_t_but0id
+                                      it_but000    TYPE ty_t_but000
+                                      it_but020    TYPE ty_t_but020
+                                      it_adrc      TYPE ty_t_adrc
+                                      it_adrcityt  TYPE ty_t_adrcityt
+                                      it_with_item TYPE ty_t_with_item
+                                      it_t059z     TYPE ty_t_t059z
+                            CHANGING  ct_alv       TYPE ty_t_out_alv.
+
+ENDCLASS. " lcl_eti
+
+**----------------------------------------------------------------------*
+**       CLASS lcl_eti IMPLEMENTATION
+**----------------------------------------------------------------------*
+**       (DTT_FNAVARRO)
+**----------------------------------------------------------------------*
+CLASS lcl_eti IMPLEMENTATION.
+
+  METHOD authority_check.
+
+    LOOP AT s_gsber INTO DATA(ls_gsber).
+
+      IF ls_gsber-low IS NOT INITIAL.
+
+        AUTHORITY-CHECK OBJECT 'F_BKPF_GSB'
+          ID 'GSBER' FIELD ls_gsber-low
+          ID 'ACTVT' FIELD '03'.
+        IF sy-subrc NE 0.
+          MESSAGE e002(zfibl002gap039_bte) WITH ls_gsber-low.
+          "No tiene autorización para la división &
+        ENDIF.
+
+      ENDIF.
+
+      IF ls_gsber-high IS NOT INITIAL.
+
+        AUTHORITY-CHECK OBJECT 'F_BKPF_GSB'
+          ID 'GSBER' FIELD ls_gsber-high
+          ID 'ACTVT' FIELD '03'.
+        IF sy-subrc NE 0.
+          MESSAGE e002(zfibl002gap039_bte) WITH ls_gsber-high.
+          "No tiene autorización para la división &
+        ENDIF.
+
+      ENDIF.
+
+    ENDLOOP.
+
+  ENDMETHOD. " authority_check.
+
+  METHOD get_data.
+
+    IF p_comp EQ abap_true.
+
+      get_compensado( EXPORTING iv_bukrs     = iv_bukrs
+                                ir_gsber     = ir_gsber
+                                ir_monat     = ir_monat
+                                iv_gjahr     = iv_gjahr
+                                ir_lifnr     = ir_lifnr
+                       CHANGING ct_bsak      = ct_bsak
+                                ct_bkpf      = ct_bkpf
+                                ct_but0id    = ct_but0id
+                                ct_but000    = ct_but000
+                                ct_but020    = ct_but020
+                                ct_adrc      = ct_adrc
+                                ct_adrcityt  = ct_adrcityt
+                                ct_with_item = ct_with_item
+                                ct_t059z     = ct_t059z ).
+
+      arma_compensado( EXPORTING it_bsak      = ct_bsak
+                                 it_bkpf      = ct_bkpf
+                                 it_but0id    = ct_but0id
+                                 it_but000    = ct_but000
+                                 it_but020    = ct_but020
+                                 it_adrc      = ct_adrc
+                                 it_adrcityt  = ct_adrcityt
+                                 it_with_item = ct_with_item
+                                 it_t059z     = ct_t059z
+                        CHANGING ct_alv       = gt_alv ).
+
+    ELSEIF p_scomp EQ abap_true.
+
+      get_no_compensado( EXPORTING iv_bukrs     = iv_bukrs
+                                   ir_gsber     = ir_gsber
+                                   ir_monat     = ir_monat
+                                   iv_gjahr     = iv_gjahr
+                                   ir_lifnr     = ir_lifnr
+                          CHANGING ct_bsik      = ct_bsik
+                                   ct_bkpf      = ct_bkpf
+                                   ct_but0id    = ct_but0id
+                                   ct_but000    = ct_but000
+                                   ct_but020    = ct_but020
+                                   ct_adrc      = ct_adrc
+                                   ct_adrcityt  = ct_adrcityt
+                                   ct_with_item = ct_with_item
+                                   ct_t059z     = ct_t059z ).
+
+      arma_no_compensado( EXPORTING it_bsik      = ct_bsik
+                                    it_bkpf      = ct_bkpf
+                                    it_but0id    = ct_but0id
+                                    it_but000    = ct_but000
+                                    it_but020    = ct_but020
+                                    it_adrc      = ct_adrc
+                                    it_adrcityt  = ct_adrcityt
+                                    it_with_item = ct_with_item
+                                    it_t059z     = ct_t059z
+                           CHANGING ct_alv       = gt_alv ).
+
+    ELSEIF p_todos EQ abap_true.
+
+      get_todos_documentos( EXPORTING iv_bukrs     = iv_bukrs
+                                      ir_gsber     = ir_gsber
+                                      ir_monat     = ir_monat
+                                      iv_gjahr     = iv_gjahr
+                                      ir_lifnr     = ir_lifnr
+                             CHANGING ct_all_doc   = ct_all_doc
+                                      ct_bkpf      = ct_bkpf
+                                      ct_but0id    = ct_but0id
+                                      ct_but000    = ct_but000
+                                      ct_but020    = ct_but020
+                                      ct_adrc      = ct_adrc
+                                      ct_adrcityt  = ct_adrcityt
+                                      ct_with_item = ct_with_item
+                                      ct_t059z     = ct_t059z ).
+
+      arma_todos_documentos( EXPORTING it_all_doc   = ct_all_doc
+                                       it_bkpf      = ct_bkpf
+                                       it_but0id    = ct_but0id
+                                       it_but000    = ct_but000
+                                       it_but020    = ct_but020
+                                       it_adrc      = ct_adrc
+                                       it_adrcityt  = ct_adrcityt
+                                       it_with_item = ct_with_item
+                                       it_t059z     = ct_t059z
+                              CHANGING ct_alv       = gt_alv ).
+
+    ENDIF.
+
+  ENDMETHOD. " get_data.
+
+  METHOD display_alv.
+
+    DATA: ls_layout_key    TYPE salv_s_layout_key,
+          lo_col_tab       TYPE REF TO cl_salv_column_table,
+          lo_event_handler TYPE REF TO lcl_event_handler.
+
+    IF gt_alv[] IS NOT INITIAL.
+
+      TRY.
+          cl_salv_table=>factory( IMPORTING r_salv_table = DATA(lo_salv)
+                                   CHANGING t_table      = gt_alv[]  ).
+
+          IF lo_salv IS BOUND.
+
+            lo_salv->get_display_settings( )->set_striped_pattern( if_salv_c_bool_sap=>true ).
+
+            " Selección
+            lo_salv->get_selections( )->set_selection_mode( value = if_salv_c_selection_mode=>single ).
+
+            " Set the ALV Toolbars / status GUI
+            lo_salv->set_screen_status( EXPORTING report        = sy-repid
+                                                  pfstatus      = 'STANDARD_FULLSCREEN' ##NO_TEXT
+                                                  set_functions = lo_salv->c_functions_all  ).
+
+            " Set the ALV Layouts
+            DATA(ol_layout_settings) = lo_salv->get_layout( ).
+            ls_layout_key-report = sy-repid.
+            ol_layout_settings->set_key( ls_layout_key ).
+            ol_layout_settings->set_save_restriction( if_salv_c_layout=>restrict_none ).
+
+            " Tratamiento columnas - Optimizar columnas ALV - size
+            DATA(ol_columns) = lo_salv->get_columns( ).
+            ol_columns->set_optimize( ).
+
+*           [Cambiar títulos de columnas y características]
+
+*           01. Base retención
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'QSSHB' ) ##NO_TEXT.
+                lo_col_tab->set_alignment( if_salv_c_alignment=>right ). " Alineamos a la derecha
+                lo_col_tab->set_decimals( '0' ). " Omitimos salida de decimales
+
+                TRY. " Referemciamos con la columna moneda
+                    lo_col_tab->set_currency_column( 'WAERS' ). ##NO_TEXT.
+                  CATCH cx_salv_data_error INTO DATA(ol_error). " ALV: General Error Class (Checked in Syntax Check)
+                ENDTRY.
+
+              CATCH cx_salv_not_found INTO DATA(ol_not_found).
+                MESSAGE ol_not_found->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+            ENDTRY.
+
+*           02. Importe retención
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'QBSHB' ) ##NO_TEXT.
+                lo_col_tab->set_alignment( if_salv_c_alignment=>right ).
+                lo_col_tab->set_decimals( '0' ).
+
+                TRY.
+                    lo_col_tab->set_currency_column( 'WAERS' ). ##NO_TEXT.
+                  CATCH cx_salv_data_error INTO ol_error. " ALV: General Error Class (Checked in Syntax Check)
+                ENDTRY.
+
+              CATCH cx_salv_not_found INTO ol_not_found.
+                MESSAGE ol_not_found->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+            ENDTRY.
+
+*           03. Importe
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'DMBTR' ) ##NO_TEXT.
+                lo_col_tab->set_alignment( if_salv_c_alignment=>right ).
+                lo_col_tab->set_decimals( '0' ).
+
+                TRY.
+                    lo_col_tab->set_currency_column( 'WAERS' ). ##NO_TEXT.
+                  CATCH cx_salv_data_error INTO ol_error. " ALV: General Error Class (Checked in Syntax Check)
+                ENDTRY.
+
+              CATCH cx_salv_not_found INTO ol_not_found.
+                MESSAGE ol_not_found->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+            ENDTRY.
+
+*           04.Moneda
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'WAERS' ) ##NO_TEXT.
+*                lo_col_tab->set_visible( if_salv_c_bool_sap=>false ). " Oculta salida moneda
+              CATCH cx_salv_not_found INTO ol_not_found.
+                MESSAGE ol_not_found->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+            ENDTRY.
+
+*           Habilita Drill-Down
+
+*           05. Documento
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'BELNR' ). ##NO_TEXT.
+                lo_col_tab->set_cell_type( if_salv_c_cell_type=>hotspot ).
+              CATCH cx_salv_not_found.
+                MESSAGE s010(zfibl002gap039_bte) DISPLAY LIKE 'W'.
+                "Navegación no disponible
+            ENDTRY.
+
+*           06. Documento compensado
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'AUGBL' ). ##NO_TEXT.
+                lo_col_tab->set_cell_type( if_salv_c_cell_type=>hotspot ).
+              CATCH cx_salv_not_found.
+                MESSAGE s010(zfibl002gap039_bte) DISPLAY LIKE 'W'.
+                "Navegación no disponible
+            ENDTRY.
+
+*           07. Cantidad
+            TRY.
+                lo_col_tab ?= ol_columns->get_column( 'CANT' ) ##NO_TEXT.
+                lo_col_tab->set_alignment( if_salv_c_alignment=>left ).
+                lo_col_tab->set_long_text( TEXT-030 ).   " Cantidad
+                lo_col_tab->set_medium_text( TEXT-030 ). " Cantidad
+                lo_col_tab->set_short_text( TEXT-030 ).  " Cantidad
+              CATCH cx_salv_not_found INTO ol_not_found.
+                MESSAGE ol_not_found->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+            ENDTRY.
+
+*           Eventos
+            lo_event_handler = NEW #(  ).
+            SET HANDLER lo_event_handler->added_function FOR lo_salv->get_event( ).
+            SET HANDLER lo_event_handler->on_link_click  FOR lo_salv->get_event( ).
+
+*           Despliegue
+            lo_salv->display( ).
+
+          ENDIF.
+
+        CATCH cx_salv_msg INTO DATA(lo_salv_msg).
+          MESSAGE lo_salv_msg->get_text( ) TYPE 'S' DISPLAY LIKE 'E'.
+      ENDTRY.
+
+    ENDIF.
+
+  ENDMETHOD. " display_alv.
+
+  METHOD get_compensado.
+
+*   01. Obtenemos los documentos BTE contabilizadas y compensadas
+    SELECT FROM bsak_view
+      FIELDS bukrs,
+             gsber,
+             belnr,
+             gjahr,
+             lifnr,
+             blart,
+             xblnr,
+             bldat,
+             budat,
+             qsshb,
+             qbshb,
+             dmbtr,
+             sgtxt,
+             augbl,
+             augdt,
+             waers
+      WHERE ( bukrs EQ @iv_bukrs )
+        AND ( lifnr IN @ir_lifnr )
+        AND ( gjahr EQ @iv_gjahr )
+        AND ( blart EQ @gc_bt    )
+        AND ( monat IN @ir_monat )
+        AND ( gsber IN @ir_gsber )
+      INTO TABLE @ct_bsak.
+    IF sy-subrc EQ 0.
+
+*     02. Documentos BTE vigentes
+      SELECT FROM bkpf
+        FIELDS bukrs,
+               gjahr,
+               belnr,
+           xreversed
+        FOR ALL ENTRIES IN @ct_bsak
+        WHERE ( bukrs EQ @ct_bsak-bukrs )
+          AND ( gjahr EQ @ct_bsak-gjahr )
+          AND ( belnr EQ @ct_bsak-belnr )
+        INTO TABLE @ct_bkpf. "#EC CI_NO_TRANSFORM "#EC CI_FAE_LINES_ENSURED
+      IF sy-subrc EQ 0.
+
+*       Si el campo BKPF-XREVERSED <> vacío, debemos excluirlos de la tabla BSAK
+        LOOP AT ct_bkpf ASSIGNING FIELD-SYMBOL(<fs_bkpf>).
+
+          IF <fs_bkpf>-xreversed NE abap_false.
+
+            DELETE ct_bsak WHERE bukrs EQ <fs_bkpf>-bukrs
+                             AND gjahr EQ <fs_bkpf>-gjahr
+                             AND belnr EQ <fs_bkpf>-belnr.
+          ENDIF.
+
+        ENDLOOP.
+
+      ENDIF.
+
+*     04. Búsqueda datos del proveedor
+      SELECT FROM but0id
+        FIELDS partner,
+               type,
+               idnumber
+        FOR ALL ENTRIES IN @ct_bsak
+        WHERE ( partner EQ @ct_bsak-lifnr )
+          AND ( type    EQ @gc_run
+           OR   type    EQ @gc_rut )
+        INTO TABLE @ct_but0id.
+
+*     05. Buscamos los datos generales del proveedor
+      SELECT FROM but000
+        FIELDS partner,
+               name_first,
+               name_last,
+               name_lst2
+        FOR ALL ENTRIES IN @ct_bsak
+        WHERE partner EQ @ct_bsak-lifnr
+        INTO TABLE @ct_but000.
+
+*     06. Buscamos las direcciones
+      SELECT FROM but020
+        FIELDS partner,
+               addrnumber
+        FOR ALL ENTRIES IN @ct_bsak
+        WHERE partner EQ @ct_bsak-lifnr
+        INTO TABLE @ct_but020.
+      IF sy-subrc EQ 0.
+
+        SELECT FROM adrc
+          FIELDS addrnumber,
+                 street,  " Dirección
+                 mc_city1 " Comuna
+          FOR ALL ENTRIES IN @ct_but020
+          WHERE addrnumber EQ @ct_but020-addrnumber
+          INTO TABLE @ct_adrc.                     "#EC CI_NO_TRANSFORM
+        IF sy-subrc EQ 0.
+
+*         07. Buscamos datos de la comuna
+          SELECT FROM adrcityt                          "#EC CI_GENBUFF
+            FIELDS city_code, " Código comuna
+                   city_name,
+                   mc_city
+            FOR ALL ENTRIES IN @ct_adrc
+            WHERE mc_city EQ @ct_adrc-mc_city1
+            INTO TABLE @ct_adrcityt. "#EC CI_NO_TRANSFORM "#EC CI_GENBUFF
+
+        ENDIF.
+
+      ENDIF.
+
+      SELECT FROM with_item
+        FIELDS bukrs,
+               belnr,
+               gjahr,
+               witht,
+               wt_withcd
+        FOR ALL ENTRIES IN @ct_bsak
+        WHERE bukrs EQ @ct_bsak-bukrs
+          AND belnr EQ @ct_bsak-belnr
+          AND gjahr EQ @ct_bsak-gjahr
+        INTO TABLE @ct_with_item.
+      IF sy-subrc EQ 0.
+
+        SELECT FROM t059z
+          FIELDS witht,
+                 wt_withcd,
+                 qsatz
+          FOR ALL ENTRIES IN @ct_with_item
+          WHERE witht     EQ @ct_with_item-witht
+            AND wt_withcd EQ @ct_with_item-wt_withcd
+            AND land1     EQ @gc_cl
+          INTO TABLE @ct_t059z.
+
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD. " get_compensado
+
+  METHOD get_no_compensado.
+
+*   01. Obtenemos los documentos BTE no compensadas
+    SELECT FROM bsik_view
+      FIELDS bukrs,
+             gsber,
+             belnr,
+             gjahr,
+             lifnr,
+             blart,
+             xblnr,
+             bldat,
+             budat,
+             qsshb,
+             qbshb,
+             dmbtr,
+             sgtxt,
+             augbl,
+             augdt,
+             waers
+      WHERE ( bukrs EQ @iv_bukrs )
+        AND ( lifnr IN @ir_lifnr )
+        AND ( gjahr EQ @iv_gjahr )
+        AND ( blart EQ @gc_bt    )
+        AND ( monat IN @ir_monat )
+        AND ( gsber IN @ir_gsber )
+      INTO TABLE @ct_bsik.
+    IF sy-subrc EQ 0.
+
+*     02. Documentos BTE vigentes
+      SELECT FROM bkpf
+        FIELDS bukrs,
+               gjahr,
+               belnr,
+           xreversed
+        FOR ALL ENTRIES IN @ct_bsik
+        WHERE ( bukrs EQ @ct_bsik-bukrs )
+          AND ( gjahr EQ @ct_bsik-gjahr )
+          AND ( belnr EQ @ct_bsik-belnr )
+        INTO TABLE @ct_bkpf. "#EC CI_NO_TRANSFORM "#EC CI_FAE_LINES_ENSURED
+      IF sy-subrc EQ 0.
+
+*       Si el campo BKPF-XREVERSED <> vacío, debemos excluirlos de la tabla BSAK
+        LOOP AT ct_bkpf ASSIGNING FIELD-SYMBOL(<fs_bkpf>).
+
+          IF <fs_bkpf>-xreversed NE abap_false.
+
+            DELETE ct_bsik WHERE bukrs EQ <fs_bkpf>-bukrs
+                             AND gjahr EQ <fs_bkpf>-gjahr
+                             AND belnr EQ <fs_bkpf>-belnr.
+          ENDIF.
+
+        ENDLOOP.
+
+      ENDIF.
+
+*     04. Búsqueda datos del proveedor
+      SELECT FROM but0id
+        FIELDS partner,
+               type,
+               idnumber
+        FOR ALL ENTRIES IN @ct_bsik
+        WHERE ( partner EQ @ct_bsik-lifnr )
+          AND ( type    EQ @gc_run
+           OR   type    EQ @gc_rut )
+        INTO TABLE @ct_but0id.
+
+*     05. Buscamos los datos generales del proveedor
+      SELECT FROM but000
+        FIELDS partner,
+               name_first,
+               name_last,
+               name_lst2
+        FOR ALL ENTRIES IN @ct_bsik
+        WHERE partner EQ @ct_bsik-lifnr
+        INTO TABLE @ct_but000.
+
+*     06. Buscamos las direcciones
+      SELECT FROM but020
+        FIELDS partner,
+               addrnumber
+        FOR ALL ENTRIES IN @ct_bsik
+        WHERE partner EQ @ct_bsik-lifnr
+        INTO TABLE @ct_but020.
+      IF sy-subrc EQ 0.
+
+        SELECT FROM adrc
+          FIELDS addrnumber,
+                 street,  " Dirección
+                 mc_city1 " Comuna
+          FOR ALL ENTRIES IN @ct_but020
+          WHERE addrnumber EQ @ct_but020-addrnumber
+          INTO TABLE @ct_adrc.                     "#EC CI_NO_TRANSFORM
+        IF sy-subrc EQ 0.
+
+*         07. Buscamos datos de la comuna
+          SELECT FROM adrcityt                          "#EC CI_GENBUFF
+            FIELDS city_code, " Código comuna
+                   city_name,
+                   mc_city
+            FOR ALL ENTRIES IN @ct_adrc
+            WHERE mc_city EQ @ct_adrc-mc_city1
+            INTO TABLE @ct_adrcityt. "#EC CI_NO_TRANSFORM "#EC CI_GENBUFF
+
+        ENDIF.
+
+      ENDIF.
+
+      SELECT FROM with_item
+        FIELDS bukrs,
+               belnr,
+               gjahr,
+               witht,
+               wt_withcd
+        FOR ALL ENTRIES IN @ct_bsik
+        WHERE bukrs EQ @ct_bsik-bukrs
+          AND belnr EQ @ct_bsik-belnr
+          AND gjahr EQ @ct_bsik-gjahr
+        INTO TABLE @ct_with_item.
+      IF sy-subrc EQ 0.
+
+        SELECT FROM t059z
+          FIELDS witht,
+                 wt_withcd,
+                 qsatz
+          FOR ALL ENTRIES IN @ct_with_item
+          WHERE witht     EQ @ct_with_item-witht
+            AND wt_withcd EQ @ct_with_item-wt_withcd
+            AND land1     EQ @gc_cl
+          INTO TABLE @ct_t059z.
+
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD. " get_no_compensado
+
+  METHOD get_todos_documentos.
+
+*   01. Documentos BTE vigentes compensados
+    SELECT FROM bsak_view
+      FIELDS bukrs,
+             gsber,
+             belnr,
+             gjahr,
+             lifnr,
+             blart,
+             xblnr,
+             bldat,
+             budat,
+             qsshb,
+             qbshb,
+             dmbtr,
+             sgtxt,
+             augbl,
+             augdt,
+             waers
+      WHERE ( bukrs EQ @iv_bukrs )
+        AND ( lifnr IN @ir_lifnr )
+        AND ( gjahr EQ @iv_gjahr )
+        AND ( blart EQ @gc_bt    )
+        AND ( monat IN @ir_monat )
+        AND ( gsber IN @ir_gsber )
+      INTO TABLE @ct_all_doc.
+    IF sy-subrc EQ 0.
+
+*     Documentos BTE vigentes NO compensados
+      SELECT FROM bsik_view
+        FIELDS bukrs,
+               gsber,
+               belnr,
+               gjahr,
+               lifnr,
+               blart,
+               xblnr,
+               bldat,
+               budat,
+               qsshb,
+               qbshb,
+               dmbtr,
+               sgtxt,
+               augbl,
+               augdt,
+               waers
+        WHERE ( bukrs EQ @iv_bukrs )
+          AND ( lifnr IN @ir_lifnr )
+          AND ( gjahr EQ @iv_gjahr )
+          AND ( blart EQ @gc_bt    )
+          AND ( monat IN @ir_monat )
+          AND ( gsber IN @ir_gsber )
+        APPENDING TABLE @ct_all_doc.
+      IF sy-subrc EQ 0.
+
+*       02. Documentos contabilizados
+        SELECT FROM bkpf
+          FIELDS bukrs,
+                 gjahr,
+                 belnr,
+                 xreversed
+          FOR ALL ENTRIES IN @ct_all_doc
+          WHERE ( bukrs EQ @ct_all_doc-bukrs )
+            AND ( gjahr EQ @ct_all_doc-gjahr )
+            AND ( belnr EQ @ct_all_doc-belnr )
+          INTO TABLE @ct_bkpf. "#EC CI_NO_TRANSFORM "#EC CI_FAE_LINES_ENSURED
+        IF sy-subrc EQ 0.
+
+*         Si el campo BKPF-XREVERSED <> vacío, debemos excluirlos de la tabla BSAK
+          LOOP AT ct_bkpf ASSIGNING FIELD-SYMBOL(<fs_bkpf>).
+
+            IF <fs_bkpf>-xreversed NE abap_false.
+
+              DELETE ct_all_doc WHERE bukrs EQ <fs_bkpf>-bukrs
+                                  AND gjahr EQ <fs_bkpf>-gjahr
+                                  AND belnr EQ <fs_bkpf>-belnr.
+            ENDIF.
+
+          ENDLOOP.
+
+        ENDIF.
+
+*       04. Búsqueda datos del proveedor
+        SELECT FROM but0id
+          FIELDS partner,
+                 type,
+                 idnumber
+          FOR ALL ENTRIES IN @ct_all_doc
+          WHERE ( partner EQ @ct_all_doc-lifnr )
+            AND ( type    EQ @gc_run
+             OR   type    EQ @gc_rut )
+          INTO TABLE @ct_but0id.
+
+*       05. Buscamos los datos generales del proveedor
+        SELECT FROM but000
+          FIELDS partner,
+                 name_first,
+                 name_last,
+                 name_lst2
+          FOR ALL ENTRIES IN @ct_all_doc
+          WHERE partner EQ @ct_all_doc-lifnr
+          INTO TABLE @ct_but000.
+
+*       06. Buscamos las direcciones
+        SELECT FROM but020
+          FIELDS partner,
+                 addrnumber
+          FOR ALL ENTRIES IN @ct_all_doc
+          WHERE partner EQ @ct_all_doc-lifnr
+          INTO TABLE @ct_but020.
+        IF sy-subrc EQ 0.
+
+          SELECT FROM adrc
+            FIELDS addrnumber,
+                   street,  " Dirección
+                   mc_city1 " Comuna
+            FOR ALL ENTRIES IN @ct_but020
+            WHERE addrnumber EQ @ct_but020-addrnumber
+            INTO TABLE @ct_adrc.                   "#EC CI_NO_TRANSFORM
+          IF sy-subrc EQ 0.
+
+*           07. Buscamos datos de la comuna
+            SELECT FROM adrcityt                        "#EC CI_GENBUFF
+              FIELDS city_code, " Código comuna
+                     city_name,
+                     mc_city
+              FOR ALL ENTRIES IN @ct_adrc
+              WHERE mc_city EQ @ct_adrc-mc_city1
+              INTO TABLE @ct_adrcityt. "#EC CI_NO_TRANSFORM "#EC CI_GENBUFF
+
+          ENDIF.
+
+        ENDIF.
+
+        SELECT FROM with_item
+          FIELDS bukrs,
+                 belnr,
+                 gjahr,
+                 witht,
+                 wt_withcd
+          FOR ALL ENTRIES IN @ct_all_doc
+          WHERE bukrs EQ @ct_all_doc-bukrs
+            AND belnr EQ @ct_all_doc-belnr
+            AND gjahr EQ @ct_all_doc-gjahr
+          INTO TABLE @ct_with_item.
+        IF sy-subrc EQ 0.
+
+          SELECT FROM t059z
+            FIELDS witht,
+                   wt_withcd,
+                   qsatz
+            FOR ALL ENTRIES IN @ct_with_item
+            WHERE witht     EQ @ct_with_item-witht
+              AND wt_withcd EQ @ct_with_item-wt_withcd
+              AND land1     EQ @gc_cl
+            INTO TABLE @ct_t059z.
+
+        ENDIF.
+
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD. " get_todos_documentos
+
+  METHOD arma_compensado.
+
+    DATA: lv_cont TYPE int4 VALUE IS INITIAL.
+
+    LOOP AT it_bsak ASSIGNING FIELD-SYMBOL(<fs_bsak>).
+
+      APPEND INITIAL LINE TO ct_alv ASSIGNING FIELD-SYMBOL(<fs_alv>).
+
+      ADD 1 TO lv_cont.
+
+*     00. Cantidad de documentos
+      <fs_alv>-cant = lv_cont.
+
+*     01. Sociedad  BUKRS
+      <fs_alv>-bukrs = <fs_bsak>-bukrs.
+
+*     02. División  GSBER
+      <fs_alv>-gsber = <fs_bsak>-gsber.
+
+*     03. N° Documento BELNR
+      <fs_alv>-belnr = <fs_bsak>-belnr.
+
+*     04. Ejercicio  GJAHR
+      <fs_alv>-gjahr = <fs_bsak>-gjahr.
+
+*     05. Proveedor  LIFNR
+      <fs_alv>-lifnr = <fs_bsak>-lifnr.
+
+*     06. RUT  idnumber
+      TRY.
+          DATA(ls_but0id) = it_but0id[ partner = <fs_bsak>-lifnr ].
+
+          <fs_alv>-idnumber = ls_but0id-idnumber.
+
+        CATCH cx_sy_itab_line_not_found INTO DATA(lo_line).
+      ENDTRY.
+
+*     07. Nombre proveedor name_first
+      TRY.
+          DATA(ls_but000) = it_but000[ partner = <fs_bsak>-lifnr ].
+
+          <fs_alv>-name_first = |{ ls_but000-name_first } { ls_but000-name_last }|.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     [Datos de dirección]
+      TRY.
+          DATA(ls_but020) = it_but020[ partner = <fs_bsak>-lifnr ].
+          IF ls_but020 IS NOT INITIAL.
+
+            TRY.
+                DATA(ls_adrc) = it_adrc[ addrnumber = ls_but020-addrnumber ].
+                IF ls_adrc IS NOT INITIAL .
+
+*                 08. Dirección street
+                  <fs_alv>-street   = ls_adrc-street.
+
+*                 09. Comuna mc_city1
+                  <fs_alv>-mc_city1 = ls_adrc-mc_city1.
+
+                  TRY.
+                      DATA(ls_adrcityt) = it_adrcityt[ mc_city = ls_adrc-mc_city1 ].
+
+*                     10. Código comuna city_code
+                      <fs_alv>-city_code = |{ ls_adrcityt-city_code ALPHA = OUT }|.
+
+                    CATCH cx_sy_itab_line_not_found INTO lo_line.
+                  ENDTRY.
+
+                ENDIF.
+
+              CATCH cx_sy_itab_line_not_found INTO lo_line.
+            ENDTRY.
+
+          ENDIF.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     11. Clase Documento  BLART
+      <fs_alv>-blart = <fs_bsak>-blart.
+
+*     12. Referencia  XBLNR
+      <fs_alv>-xblnr = <fs_bsak>-xblnr.
+
+*     13. Fecha documento  BLDAT
+      <fs_alv>-bldat = <fs_bsak>-bldat.
+
+*     14. Fecha contabilización  BUDAT
+      <fs_alv>-budat = <fs_bsak>-budat.
+
+*     15. Base retención  QSSHB
+      <fs_alv>-qsshb = <fs_bsak>-qsshb.
+
+*     16. Importe retención  QBSHB
+      <fs_alv>-qbshb = <fs_bsak>-qbshb.
+
+*     17. Importe  DMBTR
+      <fs_alv>-dmbtr = <fs_bsak>-dmbtr.
+
+*     18. Texto  SGTXT
+      <fs_alv>-sgtxt = <fs_bsak>-sgtxt.
+
+*     19. Documento Compensación  AUGBL
+      <fs_alv>-augbl = <fs_bsak>-augbl.
+
+*     20. Fecha compensación  AUGDT
+      <fs_alv>-audgt = <fs_bsak>-augdt.
+
+*     [Datos de retención]
+      TRY.
+          DATA(ls_with_item) = it_with_item[ bukrs = <fs_bsak>-bukrs
+                                             belnr = <fs_bsak>-belnr
+                                             gjahr = <fs_bsak>-gjahr ].
+
+*         21. Indicador de retención WITH_ITEM
+          <fs_alv>-wt_withcd = ls_with_item-wt_withcd.
+
+*.        22. Tipo de rentención witht
+          <fs_alv>-witht = ls_with_item-witht.
+
+
+          TRY.
+              DATA(ls_t059z) = it_t059z[ wt_withcd = ls_with_item-wt_withcd
+                                         witht     = ls_with_item-witht ].
+
+*             23. % Retención  QSATZ T059Z
+              <fs_alv>-qsatz = ls_t059z-qsatz.
+
+            CATCH cx_sy_itab_line_not_found INTO lo_line.
+          ENDTRY.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     24. Moneda waers
+      <fs_alv>-waers = <fs_bsak>-waers.
+
+    ENDLOOP.
+
+    CLEAR: lv_cont.
+
+  ENDMETHOD. " arma_compensado
+
+  METHOD arma_no_compensado.
+
+    DATA: lv_cont TYPE int4 VALUE IS INITIAL.
+
+    LOOP AT it_bsik ASSIGNING FIELD-SYMBOL(<fs_bsik>).
+
+      APPEND INITIAL LINE TO ct_alv ASSIGNING FIELD-SYMBOL(<fs_alv>).
+
+      ADD 1 TO lv_cont.
+
+*     00. Cantidad de documentos
+      <fs_alv>-cant = lv_cont.
+
+*     01. Sociedad  BUKRS
+      <fs_alv>-bukrs = <fs_bsik>-bukrs.
+
+*     02. División  GSBER
+      <fs_alv>-gsber = <fs_bsik>-gsber.
+
+*     03. N° Documento BELNR
+      <fs_alv>-belnr = <fs_bsik>-belnr.
+
+*     04. Ejercicio  GJAHR
+      <fs_alv>-gjahr = <fs_bsik>-gjahr.
+
+*     05. Proveedor  LIFNR
+      <fs_alv>-lifnr = <fs_bsik>-lifnr.
+
+*     06. RUT  idnumber
+      TRY.
+          DATA(ls_but0id) = it_but0id[ partner = <fs_bsik>-lifnr ].
+
+          <fs_alv>-idnumber = ls_but0id-idnumber.
+
+        CATCH cx_sy_itab_line_not_found INTO DATA(lo_line).
+      ENDTRY.
+
+*     07. Nombre proveedor name_first
+      TRY.
+          DATA(ls_but000) = it_but000[ partner = <fs_bsik>-lifnr ].
+
+          <fs_alv>-name_first = |{ ls_but000-name_first } { ls_but000-name_last }|.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     [Datos de dirección]
+      TRY.
+          DATA(ls_but020) = it_but020[ partner = <fs_bsik>-lifnr ].
+          IF ls_but020 IS NOT INITIAL.
+
+            TRY.
+                DATA(ls_adrc) = it_adrc[ addrnumber = ls_but020-addrnumber ].
+                IF ls_adrc IS NOT INITIAL .
+
+*                 08. Dirección street
+                  <fs_alv>-street   = ls_adrc-street.
+
+*                 09. Comuna mc_city1
+                  <fs_alv>-mc_city1 = ls_adrc-mc_city1.
+
+                  TRY.
+                      DATA(ls_adrcityt) = it_adrcityt[ mc_city = ls_adrc-mc_city1 ].
+
+*                     10. Código comuna city_code
+                      <fs_alv>-city_code = |{ ls_adrcityt-city_code ALPHA = OUT }|.
+
+                    CATCH cx_sy_itab_line_not_found INTO lo_line.
+                  ENDTRY.
+
+                ENDIF.
+
+              CATCH cx_sy_itab_line_not_found INTO lo_line.
+            ENDTRY.
+
+          ENDIF.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     11. Clase Documento  BLART
+      <fs_alv>-blart = <fs_bsik>-blart.
+
+*     12. Referencia  XBLNR
+      <fs_alv>-xblnr = <fs_bsik>-xblnr.
+
+*     13. Fecha documento  BLDAT
+      <fs_alv>-bldat = <fs_bsik>-bldat.
+
+*     14. Fecha contabilización  BUDAT
+      <fs_alv>-budat = <fs_bsik>-budat.
+
+*     15. Base retención  QSSHB
+      <fs_alv>-qsshb = <fs_bsik>-qsshb.
+
+*     16. Importe retención  QBSHB
+      <fs_alv>-qbshb = <fs_bsik>-qbshb.
+
+*     17. Importe  DMBTR
+      <fs_alv>-dmbtr = <fs_bsik>-dmbtr.
+
+*     18. Texto  SGTXT
+      <fs_alv>-sgtxt = <fs_bsik>-sgtxt.
+
+*     19. Documento Compensación  AUGBL
+      <fs_alv>-augbl = <fs_bsik>-augbl.
+
+*     20. Fecha compensación  AUGDT
+      <fs_alv>-audgt = <fs_bsik>-augdt.
+
+*     [Datos de retención]
+      TRY.
+          DATA(ls_with_item) = it_with_item[ bukrs = <fs_bsik>-bukrs
+                                             belnr = <fs_bsik>-belnr
+                                             gjahr = <fs_bsik>-gjahr ].
+
+*         21. Indicador de retención WITH_ITEM
+          <fs_alv>-wt_withcd = ls_with_item-wt_withcd.
+
+*.        22. Tipo de rentención witht
+          <fs_alv>-witht = ls_with_item-witht.
+
+
+          TRY.
+              DATA(ls_t059z) = it_t059z[ wt_withcd = ls_with_item-wt_withcd
+                                         witht     = ls_with_item-witht ].
+
+*             23. % Retención  QSATZ T059Z
+              <fs_alv>-qsatz = ls_t059z-qsatz.
+
+            CATCH cx_sy_itab_line_not_found INTO lo_line.
+          ENDTRY.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     24. Moneda waers
+      <fs_alv>-waers = <fs_bsik>-waers.
+
+    ENDLOOP.
+
+    CLEAR: lv_cont.
+
+  ENDMETHOD. " arma_no_compensado
+
+  METHOD arma_todos_documentos.
+
+    DATA: lv_cont TYPE int4 VALUE IS INITIAL.
+
+    LOOP AT it_all_doc ASSIGNING FIELD-SYMBOL(<fs_all_doc>).
+
+      APPEND INITIAL LINE TO ct_alv ASSIGNING FIELD-SYMBOL(<fs_alv>).
+
+      ADD 1 TO lv_cont.
+
+*     00. Cantidad de documentos
+      <fs_alv>-cant = lv_cont.
+
+*     01. Sociedad  BUKRS
+      <fs_alv>-bukrs = <fs_all_doc>-bukrs.
+
+*     02. División  GSBER
+      <fs_alv>-gsber = <fs_all_doc>-gsber.
+
+*     03. N° Documento BELNR
+      <fs_alv>-belnr = <fs_all_doc>-belnr.
+
+*     04. Ejercicio  GJAHR
+      <fs_alv>-gjahr = <fs_all_doc>-gjahr.
+
+*     05. Proveedor  LIFNR
+      <fs_alv>-lifnr = <fs_all_doc>-lifnr.
+
+*     06. RUT  idnumber
+      TRY.
+          DATA(ls_but0id) = it_but0id[ partner = <fs_all_doc>-lifnr ].
+
+          <fs_alv>-idnumber = ls_but0id-idnumber.
+
+        CATCH cx_sy_itab_line_not_found INTO DATA(lo_line).
+      ENDTRY.
+
+*     07. Nombre proveedor name_first
+      TRY.
+          DATA(ls_but000) = it_but000[ partner = <fs_all_doc>-lifnr ].
+
+          <fs_alv>-name_first = |{ ls_but000-name_first } { ls_but000-name_last }|.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     [Datos de dirección]
+      TRY.
+          DATA(ls_but020) = it_but020[ partner = <fs_all_doc>-lifnr ].
+          IF ls_but020 IS NOT INITIAL.
+
+            TRY.
+                DATA(ls_adrc) = it_adrc[ addrnumber = ls_but020-addrnumber ].
+                IF ls_adrc IS NOT INITIAL .
+
+*                 08. Dirección street
+                  <fs_alv>-street   = ls_adrc-street.
+
+*                 09. Comuna mc_city1
+                  <fs_alv>-mc_city1 = ls_adrc-mc_city1.
+
+                  TRY.
+                      DATA(ls_adrcityt) = it_adrcityt[ mc_city = ls_adrc-mc_city1 ].
+
+*                     10. Código comuna city_code
+                      <fs_alv>-city_code = |{ ls_adrcityt-city_code ALPHA = OUT }|.
+
+                    CATCH cx_sy_itab_line_not_found INTO lo_line.
+                  ENDTRY.
+
+                ENDIF.
+
+              CATCH cx_sy_itab_line_not_found INTO lo_line.
+            ENDTRY.
+
+          ENDIF.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     11. Clase Documento  BLART
+      <fs_alv>-blart = <fs_all_doc>-blart.
+
+*     12. Referencia  XBLNR
+      <fs_alv>-xblnr = <fs_all_doc>-xblnr.
+
+*     13. Fecha documento  BLDAT
+      <fs_alv>-bldat = <fs_all_doc>-bldat.
+
+*     14. Fecha contabilización  BUDAT
+      <fs_alv>-budat = <fs_all_doc>-budat.
+
+*     15. Base retención  QSSHB
+      <fs_alv>-qsshb = <fs_all_doc>-qsshb.
+
+*     16. Importe retención  QBSHB
+      <fs_alv>-qbshb = <fs_all_doc>-qbshb.
+
+*     17. Importe  DMBTR
+      <fs_alv>-dmbtr = <fs_all_doc>-dmbtr.
+
+*     18. Texto  SGTXT
+      <fs_alv>-sgtxt = <fs_all_doc>-sgtxt.
+
+*     19. Documento Compensación  AUGBL
+      <fs_alv>-augbl = <fs_all_doc>-augbl.
+
+*     20. Fecha compensación  AUGDT
+      <fs_alv>-audgt = <fs_all_doc>-augdt.
+
+*     [Datos de retención]
+      TRY.
+          DATA(ls_with_item) = it_with_item[ bukrs = <fs_all_doc>-bukrs
+                                             belnr = <fs_all_doc>-belnr
+                                             gjahr = <fs_all_doc>-gjahr ].
+
+*         21. Indicador de retención WITH_ITEM
+          <fs_alv>-wt_withcd = ls_with_item-wt_withcd.
+
+*.        22. Tipo de rentención witht
+          <fs_alv>-witht = ls_with_item-witht.
+
+
+          TRY.
+              DATA(ls_t059z) = it_t059z[ wt_withcd = ls_with_item-wt_withcd
+                                         witht     = ls_with_item-witht ].
+
+*             23. % Retención  QSATZ T059Z
+              <fs_alv>-qsatz = ls_t059z-qsatz.
+
+            CATCH cx_sy_itab_line_not_found INTO lo_line.
+          ENDTRY.
+
+        CATCH cx_sy_itab_line_not_found INTO lo_line.
+      ENDTRY.
+
+*     24. Moneda waers
+      <fs_alv>-waers = <fs_all_doc>-waers.
+
+    ENDLOOP.
+
+    CLEAR:lv_cont.
+
+  ENDMETHOD. " arma_no_compensado
+
+  METHOD drill_down_belnr.
+
+    IF is_row-belnr IS NOT INITIAL.
+
+      SET PARAMETER ID: 'BLN' FIELD is_row-belnr,
+                        'BUK' FIELD is_row-bukrs,
+                        'GJR' FIELD is_row-gjahr.
+      CALL TRANSACTION 'FB03' WITH AUTHORITY-CHECK AND SKIP FIRST SCREEN ##AUTH_ERR_HANDLER_MISSING. "#EC CI_CALLTA
+
+    ENDIF.
+
+  ENDMETHOD. " drill_down_belnr
+
+  METHOD drill_down_augbl.
+
+    IF is_row-augbl IS NOT INITIAL.
+
+      SET PARAMETER ID: 'BLN' FIELD is_row-augbl,
+                        'BUK' FIELD is_row-bukrs,
+                        'GJR' FIELD is_row-gjahr.
+      CALL TRANSACTION 'FB03' WITH AUTHORITY-CHECK AND SKIP FIRST SCREEN ##AUTH_ERR_HANDLER_MISSING. "#EC CI_CALLTA
+
+    ENDIF.
+
+  ENDMETHOD. " drill_down_augbl
+
+  METHOD value_request_monat.
+
+    LOOP AT ir_monat INTO DATA(sl_monat).
+      IF sl_monat-low LT 0 OR sl_monat-low GT 12.
+        MESSAGE e026(zfibl002gap039_bte).
+      ENDIF.
+
+      IF sl_monat-high LT 0 OR sl_monat-high GT 12.
+        MESSAGE e026(zfibl002gap039_bte).
+      ENDIF.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+ENDCLASS. "lcl_eti
+
+*----------------------------------------------------------------------*
+*       CLASS lcl_event_handler DEFINITION.
+*----------------------------------------------------------------------*
+*       (DTT_FNAVARRO)
+*----------------------------------------------------------------------*
+CLASS lcl_event_handler IMPLEMENTATION.
+
+  METHOD added_function.
+
+*   Add extra function
+
+  ENDMETHOD. " added_function
+
+  METHOD on_link_click.
+
+    IF lcl_eti=>gt_alv IS NOT INITIAL.
+
+      TRY.
+          DATA(ls_alv) = lcl_eti=>gt_alv[ row ].
+
+          CASE column.
+            WHEN 'BELNR'. " N° Documento
+              lcl_eti=>drill_down_belnr( is_row = ls_alv ).
+
+            WHEN 'AUGBL'. " N° Documento Compensación
+              lcl_eti=>drill_down_augbl( is_row = ls_alv ).
+            WHEN OTHERS.
+          ENDCASE.
+
+        CATCH cx_sy_itab_line_not_found INTO DATA(ol_line).
+      ENDTRY.
+
+    ENDIF.
+
+  ENDMETHOD. " on_link_click
+
+ENDCLASS. " lcl_event_handler
